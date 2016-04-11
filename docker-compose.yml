@@ -1,29 +1,31 @@
-data:
-  build: ./data
-  volumes:
-    - /opt/magento/www:/opt/www
-
 mariadb:
   build: ./mariadb
   expose:
     - "3306"
   volumes:
-    - /opt/magento/db:/var/lib/mysql
+    - /var/lib/mysql:/var/lib/mysql
+
+memcached:
+  build: ./memcached
+  expose:
+    - "11211"
+
+php-fpm:
+  build: ./php-fpm
+  expose:
+    - "9000"
+  links:
+    - mariadb
+  volumes:
+    - /opt/www:/opt/www
 
 nginx:
   build: ./nginx
   ports:
     - "80:80"
   links:
-    - phpfpm
-  volumes_from:
-   - data:rw
+    - php-fpm
+  volumes:
+   - /opt/www:/opt/www
+   - /etc/nginx:/etc/nginx
 
-phpfpm:
-  build: ./phpfpm
-  expose:
-    - "9000"
-  links:
-    - mariadb
-  volumes_from:
-    - data:rw
