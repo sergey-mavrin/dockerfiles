@@ -4,6 +4,7 @@ mariadb:
     - "3306"
   volumes:
     - /var/lib/mysql:/var/lib/mysql
+    - /opt/backup:/opt/backup
 
 memcached:
   build: ./memcached
@@ -16,6 +17,7 @@ php-fpm:
     - "9000"
   links:
     - mariadb
+    - memcached
   volumes:
     - /opt/www:/opt/www
 

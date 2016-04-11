@@ -11,5 +11,6 @@ COPY optimized.cnf /etc/my.cnf.d/
 RUN chmod 644 /etc/my.cnf.d/optimized.cnf
 VOLUME /var/lib/mysql
 RUN chown -R mysql:mysql /var/lib/mysql
+RUN mkdir /opt/backup
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
