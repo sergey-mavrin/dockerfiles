@@ -1,0 +1,29 @@
+data:
+  build: ./data
+  volumes:
+    - /opt/magento/www:/opt/www
+
+mariadb:
+  build: ./mariadb
+  expose:
+    - "3306"
+  volumes:
+    - /opt/magento/db:/var/lib/mysql
+
+nginx:
+  build: ./nginx
+  ports:
+    - "80:80"
+  links:
+    - phpfpm
+  volumes_from:
+   - data:rw
+
+phpfpm:
+  build: ./phpfpm
+  expose:
+    - "9000"
+  links:
+    - mariadb
+  volumes_from:
+    - data:rw
